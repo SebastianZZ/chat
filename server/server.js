@@ -17,17 +17,13 @@ io.on('connect',(socket) =>{
 
   socket.on('createMessage',(message) => {
     console.log('New message !! :',message);
+    io.emit('newMessage',{
+      from:message.from,
+      text:message.text,
+      createdAt: new Date().getTime()
+    });
   });
-  socket.emit('newMessage',{
-    from:'stev',
-    text:'Bierz sie do roboty gnoju',
-    crateAT:1111111
-  });
-  socket.emit('newEmail',{
-    from:'seb@op.pl',
-    text:'Hello moto',
-    createAT:123
-  });
+
   socket.on('disconnect',() =>{
     console.log('User disconnected')
   });
