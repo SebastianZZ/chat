@@ -13,7 +13,17 @@ let io = socketIO(server);
 app.use(express.static(publicPath));
 
 io.on('connect',(socket) =>{
-  console.log('New user');
+  console.log('New user connected');
+
+  socket.emit('newMessage',{
+    from:'Admin',
+    text:'Welcome to chat app my son '
+  });
+
+  socket.broadcast.emit('newMessage',{
+    from:'Admin',
+    text:'New user joined the room , be aware'
+  });
 
   socket.on('createMessage',(message) => {
     console.log('New message !! :',message);
@@ -22,6 +32,11 @@ io.on('connect',(socket) =>{
       text:message.text,
       createdAt: new Date().getTime()
     });
+    // socket.broadcast.emit('newMessage',{
+    //   from:message.from,
+    //   text:message.text,
+    //   createdAt: new Date().getTime()
+    // });
   });
 
   socket.on('disconnect',() =>{
