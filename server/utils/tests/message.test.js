@@ -1,6 +1,6 @@
-var chai = require('chai');
-var expect = chai.expect;
-var {generateMessage} = require('./message');
+let chai = require('chai');
+let expect = chai.expect;
+let {generateMessage} = require('./../message');
 
 describe('generateMessage',() =>{
   it('should generate correct message object',() =>{
