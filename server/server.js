@@ -2,39 +2,17 @@ const path = require('path');
 const express = require('express');
 const socketIO = require('socket.io');
 const http = require('http');
-const generateMessage = require('./utils/message').generateMessage;
 
+const socket = require('./utils/socket');
 const publicPath = path.join(__dirname,'../public');
 const port = process.env.PORT || 3000;
-
+const db = require('./utils/db');
 let app = express();
 let server = http.createServer(app);
 let io = socketIO(server);
 
 app.use(express.static(publicPath));
-
-io.on('connect',(socket) =>{
-  console.log('New user connected');
-
-  socket.emit('newMessage',  generateMessage('Admin','Welcome to chat app my son '));
-  socket.broadcast.emit('newMessage',generateMessage('Admin','New user joined the room , be aware'));
-
-  socket.on('createMessage',(message,callback) => {
-    console.log('New message !! :',message);
-    io.emit('newMessage',generateMessage(message.from,message.text));
-    callback('This is from the server');
-    // socket.broadcast.emit('newMessage',{
-    //   from:message.from,
-    //   text:message.text,
-    //   createdAt: new Date().getTime()
-    // });
-  });
-
-  socket.on('disconnect',() =>{
-    console.log('User disconnected')
-  });
-});
-
+socket(io);
 
 server.listen(port,() =>{
   console.log(`Server is up on ${port}`);
